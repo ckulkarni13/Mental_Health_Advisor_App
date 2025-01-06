@@ -1,19 +1,24 @@
-Mental Health Advisor Application 🧠💡
-Overview
-This is a Mental Health Advisor Application designed to assist mental health professionals in providing personalized suggestions and solutions to patients. The app uses RAG (Retrieval-Augmented Generation) and LLMs (Large Language Models) to deliver intelligent, context-aware responses. Patient data and insights are stored and retrieved using Pinecone, ensuring fast and accurate recommendations.
+# Mental Health Advisor Application 🧠💡
 
-Features
-Smart Suggestions: Uses RAG to generate tailored advice based on patient needs.
-Fast Retrieval: Pinecone database ensures quick access to relevant information.
-AI-Powered Insights: Leverages state-of-the-art Large Language Models for meaningful guidance.
-User-Friendly Interface: Simplifies the advisor's workflow with easy-to-use tools.
-How It Works
-Data Input: Advisors input patient details or queries.
-Data Retrieval: Relevant data is fetched from Pinecone.
-AI-Generated Output: LLM generates helpful suggestions or solutions.
-Output Display: The advisor receives clear, actionable recommendations.
-Tech Stack
-Backend: RAG (Retrieval-Augmented Generation), Pinecone for database management.
-AI Model: OpenAI (or similar LLM APIs).
-Frontend: Streamlit (or similar framework for the interface).
-Deployment: Streamlit Community Cloud
+## Overview
+The **Mental Health Advisor Application** is designed to empower mental health professionals with intelligent, personalized, and actionable suggestions for supporting their patients. Combining **RAG (Retrieval-Augmented Generation)** and **Large Language Models (LLMs)**, the application delivers context-aware, insightful responses tailored to patient needs. 
+
+The application leverages **Pinecone** for efficient data storage and retrieval, ensuring fast and accurate recommendations, alongside a user-friendly interface built with **Streamlit**.
+
+## Features
+- **🌟 Smart Suggestions**: Generates tailored advice using RAG based on patient needs and queries.
+- **⚡ Fast Retrieval**: Quickly fetches relevant information from the Pinecone vector database.
+- **🧠 AI-Powered Insights**: Uses cutting-edge LLMs (e.g., GPT-4) to provide empathetic and meaningful guidance.
+- **💻 User-Friendly Interface**: Designed for mental health professionals with a focus on simplicity and efficiency.
+
+## How It Works
+1. **Data Input**: Advisors input patient details, select mental health topics, or type specific queries.
+2. **Data Retrieval**: Relevant context is fetched from the Pinecone database.
+3. **AI-Generated Output**: The LLM (e.g., GPT-4) generates actionable suggestions or solutions.
+4. **Output Display**: Advisors receive clear, empathetic, and tailored recommendations to better assist their patients.
+
+## Tech Stack
+- **Backend**: RAG (Retrieval-Augmented Generation) and Pinecone for vector database management.
+- **AI Model**: OpenAI's GPT-4 (or similar advanced LLMs).
+- **Frontend**: Streamlit framework for an interactive and user-friendly interface.
+- **Deployment**: Hosted on [Streamlit Community Cloud](https://mental-health-advisor.streamlit.app/).

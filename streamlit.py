@@ -24,6 +24,7 @@ index = pc.Index(index_name)
 # OpenAI Initialization
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
+# Function to generate query embedding
 def generate_query_embedding(query):
     try:
         response = client.embeddings.create(model="text-embedding-ada-002", input=query)
@@ -32,22 +33,29 @@ def generate_query_embedding(query):
         st.error(f"Failed to generate query embedding: {e}")
         return None
 
-def query_pinecone(query_embedding, pinecone_index, top_k=5):
+# Function to query Pinecone for relevant vectors
+def query_pinecone(query_embedding, pinecone_index, top_k=5, similarity_threshold=0.8):
     try:
         results = pinecone_index.query(
             vector=query_embedding,
             top_k=top_k,
             include_metadata=True
         )
-        if results["matches"]:
-            return [match["metadata"] for match in results["matches"]]
+        # Filter results by similarity threshold
+        relevant_results = [
+            match["metadata"] for match in results["matches"]
+            if match["score"] >= similarity_threshold
+        ]
+        if relevant_results:
+            return relevant_results
         else:
-            st.warning("No matches found in Pinecone.")
+            st.warning("No relevant advice could be generated for the query. Please refine your query.")
             return []
     except Exception as e:
         st.error(f"Error querying Pinecone: {e}")
         return []
 
+# Function to generate advice with GPT-4
 def generate_advice_with_gpt4(query, context):
     try:
         context_combined = "\n".join([c.get('response', '') for c in context])
@@ -74,6 +82,7 @@ def generate_advice_with_gpt4(query, context):
         st.error(f"Error generating response with GPT-4: {e}")
         return "Sorry, I couldn't generate a response at the moment."
 
+# Handle user query
 def handle_user_query(user_query, pinecone_index):
     query_embedding = generate_query_embedding(user_query)
     if not query_embedding:
@@ -86,32 +95,36 @@ def handle_user_query(user_query, pinecone_index):
     final_advice = generate_advice_with_gpt4(user_query, retrieved_context)
     return final_advice
 
-
 # Streamlit UI
 st.title("Mental Health Counselor Assistant")
 
 st.write("This application helps mental health counselors by providing detailed, empathetic, and actionable advice based on user queries.")
 
-# Add a dropdown for mental health issues
+# Dropdown for mental health issues
 st.subheader("Select a Mental Health Issue")
-mental_health_issues = ["Depression", "Anxiety", "PTSD", "Bipolar Disorder", "Schizophrenia"]
-selected_issue = st.selectbox("Choose an issue or type your own query below:", mental_health_issues + ["Other"])
+mental_health_issues = ["Depression", "Anxiety", "PTSD", "Bipolar Disorder", "Schizophrenia", "Other"]
+selected_issue = st.selectbox("Choose an issue or type your own query below:", mental_health_issues)
 
-# Modify the user query input
+# User query input
 user_query = ""
 if selected_issue == "Other":
     user_query = st.text_input("Enter your specific query:")
 else:
     user_query = f"Provide advice for treating {selected_issue}"
 
+# Generate advice
 if st.button("Generate Advice"):
     if user_query.strip():
         with st.spinner("Processing your query..."):
             advice = handle_user_query(user_query, index)
-            st.subheader(f"Generated Advice for {selected_issue}:")
-            st.write(advice)
+            if advice:
+                st.subheader(f"Generated Advice for {selected_issue}:")
+                st.write(advice)
+            else:
+                st.warning("No relevant advice could be generated for the query. Please refine your query.")
     else:
         st.warning("Please select an issue or enter a query.")
+
 
 # import os
 # from openai import OpenAI
